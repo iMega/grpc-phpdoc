@@ -51,7 +51,7 @@ class Grpc
 
     /**
      * this call is already finished
-    (writes_done or write_status has already been called)
+     * (writes_done or write_status has already been called)
      */
     const CALL_ERROR_ALREADY_FINISHED = 7;
 
@@ -77,7 +77,7 @@ class Grpc
 
     /**
      * completion queue for notification has not been registered with the
-    server
+     * server
      */
     const CALL_ERROR_NOT_SERVER_COMPLETION_QUEUE = 12;
 
