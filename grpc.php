@@ -439,5 +439,5 @@ class Call
  */
 class Timeval
 {
-
+    public static function infFuture() {}
 }
