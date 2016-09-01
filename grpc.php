@@ -362,11 +362,67 @@ namespace Grpc
      */
     class Server
     {
-        public function __construct() {}
-        public function requestCall() {}
-        public function addHttp2Port() {}
-        public function addSecureHttp2Port() {}
+        /**
+         * Constructs a new instance of the Server class
+         *
+         * @param array $args The arguments to pass to the server (optional)
+         */
+        public function __construct(array $args) {}
+
+        /**
+         * Request a call on a server. Creates a single GRPC_SERVER_RPC_NEW event.
+         *
+         * @param int $tag_new    The tag to associate with the new request
+         * @param int $tag_cancel The tag to use if the call is cancelled
+         */
+        public function requestCall($tag_new, $tag_cancel) {}
+
+        /**
+         * Add a http2 over tcp listener.
+         *
+         * @param string $addr The address to add
+         *
+         * @return bool true on success, false on failure
+         */
+        public function addHttp2Port($addr) {}
+
+        /**
+         * Add a secure http2 over tcp listener.
+         *
+         * @param string             $addr      The address to add
+         * @param ServerCredentials $creds_obj
+         *
+         * @return bool true on success, false on failure
+         */
+        public function addSecureHttp2Port($addr, $creds_obj) {}
+
+        /**
+         * Start a server - tells all listeners to start listening
+         */
         public function start() {}
+    }
+
+    /**
+     * Class ServerCredentials
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
+     */
+    class ServerCredentials
+    {
+        /**
+         * Create SSL credentials.
+         *
+         * @param string $pem_root_certs  PEM encoding of the server root certificates
+         * @param string $pem_private_key PEM encoding of the client's private key
+         * @param string $pem_cert_chain  PEM encoding of the client's certificate chain
+         *
+         * @return object Credentials The new SSL credentials object
+         * @throws \InvalidArgumentException
+         */
+        public static function createSsl(
+            $pem_root_certs,
+            $pem_private_key,
+            $pem_cert_chain
+        ) {}
     }
 
     /**
@@ -375,16 +431,111 @@ namespace Grpc
      */
     class Channel
     {
+        /**
+         * Construct an instance of the Channel class. If the $args array contains a
+         * "credentials" key mapping to a ChannelCredentials object, a secure channel
+         * will be created with those credentials.
+         *
+         * @param string $target The hostname to associate with this channel
+         * @param array  $args   The arguments to pass to the Channel (optional)
+         *
+         * @throws \InvalidArgumentException
+         */
+        public function __construct($target, $args = array()) {}
 
+        /**
+         * Get the endpoint this call/stream is connected to
+         *
+         * @return string The URI of the endpoint
+         */
+        public function getTarget() {}
+
+        /**
+         * Get the connectivity state of the channel
+         *
+         * @param bool $try_to_connect try to connect on the channel
+         *
+         * @return int The grpc connectivity state
+         * @throws \InvalidArgumentException
+         */
+        public function getConnectivityState($try_to_connect = false) {}
+
+        /**
+         * Watch the connectivity state of the channel until it changed
+         *
+         * @param int     $last_state   The previous connectivity state of the channel
+         * @param Timeval $deadline_obj The deadline this function should wait until
+         *
+         * @return bool If the connectivity state changes from last_state
+         *              before deadline
+         * @throws \InvalidArgumentException
+         */
+        public function watchConnectivityState($last_state, Timeval $deadline_obj) {}
+
+        /**
+         * Close the channel
+         */
+        public function close() {}
     }
 
     /**
-     * Class CallCredentials
+     * Class ChannelCredentials
      * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
-    class CallCredentials
+    class ChannelCredentials
     {
+        /**
+         * Set default roots pem.
+         *
+         * @param string $pem_roots PEM encoding of the server root certificates
+         *
+         * @throws \InvalidArgumentException
+         */
+        public static function setDefaultRootsPem($pem_roots) {}
 
+        /**
+         * Create a default channel credentials object.
+         *
+         * @return ChannelCredentials The new default channel credentials object
+         */
+        public static function createDefault() {}
+
+        /**
+         * Create SSL credentials.
+         *
+         * @param string $pem_root_certs  PEM encoding of the server root certificates
+         * @param string $pem_private_key PEM encoding of the client's private key
+         * @param string $pem_cert_chain  PEM encoding of the client's certificate chain
+         *
+         * @return ChannelCredentials The new SSL credentials object
+         * @throws \InvalidArgumentException
+         */
+        public static function createSsl(
+            $pem_root_certs,
+            $pem_private_key = '',
+            $pem_cert_chain = ''
+        ) {}
+
+        /**
+         * Create composite credentials from two existing credentials.
+         *
+         * @param ChannelCredentials $cred1 The first credential
+         * @param CallCredentials    $cred2 The second credential
+         *
+         * @return ChannelCredentials The new composite credentials object
+         * @throws \InvalidArgumentException
+         */
+        public static function createComposite(
+            ChannelCredentials $cred1,
+            CallCredentials $cred2
+        ) {}
+
+        /**
+         * Create insecure channel credentials
+         *
+         * @return null
+         */
+        public static function createInsecure() {}
     }
 
     /**
@@ -396,12 +547,12 @@ namespace Grpc
         /**
          * Constructs a new instance of the Call class.
          *
-         * @param Channel $channel The channel to associate the call with. Must not be
-         *     closed.
-         * @param string  $method The method to call
+         * @param Channel $channel           The channel to associate the call with.
+         *                                   Must not be closed.
+         * @param string  $method            The method to call
          * @param Timeval $absolute_deadline The deadline for completing the call
          *
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public function __construct(
             Channel $channel,
@@ -416,8 +567,8 @@ namespace Grpc
          * @param array $batch Array of actions to take
          *
          * @return object Object with results of all actions
-         * @throw \InvalidArgumentException
-         * @throw \LogicException
+         * @throws \InvalidArgumentException
+         * @throws \LogicException
          */
         public function startBatch(array $batch) {}
 
@@ -427,7 +578,7 @@ namespace Grpc
          * @param CallCredentials $creds_obj The CallCredentials object
          *
          * @return int The error code
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public function setCredentials(CallCredentials $creds_obj) {}
 
@@ -443,6 +594,37 @@ namespace Grpc
          * has not already ended with another status.
          */
         public function cancel() {}
+    }
+
+    /**
+     * Class CallCredentials
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
+     */
+    class CallCredentials
+    {
+        /**
+         * Create composite credentials from two existing credentials.
+         *
+         * @param CallCredentials $cred1 The first credential
+         * @param CallCredentials $cred2 The second credential
+         *
+         * @return CallCredentials The new composite credentials object
+         * @throws \InvalidArgumentException
+         */
+        public static function createComposite(
+            CallCredentials $cred1,
+            CallCredentials $cred2
+        ) {}
+
+        /**
+         * Create a call credentials object from the plugin API
+         *
+         * @param \Closure $callback The callback function
+         *
+         * @return CallCredentials The new call credentials object
+         * @throws \InvalidArgumentException
+         */
+        public static function createFromPlugin(\Closure $callback) {}
     }
 
     /**
@@ -466,7 +648,7 @@ namespace Grpc
          * @param Timeval $other The other Timeval object to add
          *
          * @return Timeval A new Timeval object containing the sum
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public function add(Timeval $other) {}
 
@@ -478,7 +660,7 @@ namespace Grpc
          * @param Timeval $b The second time to compare
          *
          * @return int
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public static function compare(Timeval $a, Timeval $b) {}
 
@@ -506,12 +688,12 @@ namespace Grpc
         /**
          * Checks whether the two times are within $threshold of each other
          *
-         * @param Timeval $a The first time to compare
-         * @param Timeval $b The second time to compare
+         * @param Timeval $a         The first time to compare
+         * @param Timeval $b         The second time to compare
          * @param Timeval $threshold The threshold to check against
          *
          * @return bool True if $a and $b are within $threshold, False otherwise
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public static function similar(Timeval $a, Timeval $b, Timeval $threshold) {}
 
@@ -527,7 +709,7 @@ namespace Grpc
          * @param Timeval $other The other Timeval object to subtract
          *
          * @return Timeval A new Timeval object containing the sum
-         * @throw \InvalidArgumentException
+         * @throws \InvalidArgumentException
          */
         public function subtract(Timeval $other) {}
 
