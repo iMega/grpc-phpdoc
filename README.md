@@ -2,7 +2,9 @@
 Helper autocomplete for php grpc extension.
 
 ## Installation
-@todo
+Just place such grpc.php stub file.
+
+`Settings -> Languages & Frameworks -> PHP -> Include path -> Add -> Apply`
 
 ## License
 This project is licensed under the terms of the MIT license. See the LICENSE file.
