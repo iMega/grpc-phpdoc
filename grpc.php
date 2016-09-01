@@ -5,10 +5,10 @@
  * @link https://github.com/iMega/grpc-phpdoc
  */
 /**
- * Class Grpc
+ * Grpc
  * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
  */
-class Grpc
+namespace Grpc
 {
     /**
      * Register call error constants
@@ -355,89 +355,92 @@ class Grpc
      * channel has seen a failure that it cannot recover from
      */
     const CHANNEL_SHUTDOWN = 4;
-}
-
-/**
- * Class Channel
- * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
- */
-class Channel
-{
-
-}
-
-/**
- * Class CallCredentials
- * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
- */
-class CallCredentials
-{
-
-}
-
-/**
- * Class Call
- * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
- */
-class Call
-{
-    /**
-     * Constructs a new instance of the Call class.
-     *
-     * @param Channel $channel The channel to associate the call with. Must not be
-     *     closed.
-     * @param string  $method The method to call
-     * @param Timeval $absolute_deadline The deadline for completing the call
-     *
-     * @throw \InvalidArgumentException
-     */
-    public function __construct(
-        Channel $channel,
-        $method,
-        Timeval $absolute_deadline,
-        $host_override = null
-    ) {}
 
     /**
-     * Start a batch of RPC actions.
-     *
-     * @param array $batch Array of actions to take
-     *
-     * @return object Object with results of all actions
-     * @throw \InvalidArgumentException
-     * @throw \LogicException
+     * Class Channel
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
-    public function startBatch(array $batch) {}
+    class Channel
+    {
+
+    }
 
     /**
-     * Set the CallCredentials for this call.
-     *
-     * @param CallCredentials $creds_obj The CallCredentials object
-     *
-     * @return int The error code
-     * @throw \InvalidArgumentException
+     * Class CallCredentials
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
-    public function setCredentials(CallCredentials $creds_obj) {}
+    class CallCredentials
+    {
+
+    }
 
     /**
-     * Get the endpoint this call/stream is connected to
-     *
-     * @return string The URI of the endpoint
+     * Class Call
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
-    public function getPeer() {}
+    class Call
+    {
+        /**
+         * Constructs a new instance of the Call class.
+         *
+         * @param Channel $channel The channel to associate the call with. Must not be
+         *     closed.
+         * @param string  $method The method to call
+         * @param Timeval $absolute_deadline The deadline for completing the call
+         *
+         * @throw \InvalidArgumentException
+         */
+        public function __construct(
+            Channel $channel,
+            $method,
+            Timeval $absolute_deadline,
+            $host_override = null
+        ) {}
+
+        /**
+         * Start a batch of RPC actions.
+         *
+         * @param array $batch Array of actions to take
+         *
+         * @return object Object with results of all actions
+         * @throw \InvalidArgumentException
+         * @throw \LogicException
+         */
+        public function startBatch(array $batch) {}
+
+        /**
+         * Set the CallCredentials for this call.
+         *
+         * @param CallCredentials $creds_obj The CallCredentials object
+         *
+         * @return int The error code
+         * @throw \InvalidArgumentException
+         */
+        public function setCredentials(CallCredentials $creds_obj) {}
+
+        /**
+         * Get the endpoint this call/stream is connected to
+         *
+         * @return string The URI of the endpoint
+         */
+        public function getPeer() {}
+
+        /**
+         * Cancel the call. This will cause the call to end with STATUS_CANCELLED if it
+         * has not already ended with another status.
+         */
+        public function cancel() {}
+    }
 
     /**
-     * Cancel the call. This will cause the call to end with STATUS_CANCELLED if it
-     * has not already ended with another status.
+     * Class Timeval
+     *
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
-    public function cancel() {}
-}
-
-/**
- * Class Timeval
- * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
- */
-class Timeval
-{
-    public static function infFuture() {}
+    class Timeval
+    {
+        public static function infFuture()
+        {
+        }
+    }
 }
