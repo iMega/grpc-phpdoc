@@ -357,6 +357,19 @@ namespace Grpc
     const CHANNEL_SHUTDOWN = 4;
 
     /**
+     * Class Server
+     * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
+     */
+    class Server
+    {
+        public function __construct() {}
+        public function requestCall() {}
+        public function addHttp2Port() {}
+        public function addSecureHttp2Port() {}
+        public function start() {}
+    }
+
+    /**
      * Class Channel
      * @see https://github.com/grpc/grpc/tree/master/src/php/ext/grpc
      */
@@ -439,8 +452,90 @@ namespace Grpc
      */
     class Timeval
     {
-        public static function infFuture()
-        {
-        }
+        /**
+         * Constructs a new instance of the Timeval class
+         *
+         * @param int $usec The number of microseconds in the interval
+         */
+        public function __construct($usec) {}
+
+        /**
+         * Adds another Timeval to this one and returns the sum. Calculations saturate
+         * at infinities.
+         *
+         * @param Timeval $other The other Timeval object to add
+         *
+         * @return Timeval A new Timeval object containing the sum
+         * @throw \InvalidArgumentException
+         */
+        public function add(Timeval $other) {}
+
+        /**
+         * Return negative, 0, or positive according to whether a < b, a == b, or a > b
+         * respectively.
+         *
+         * @param Timeval $a The first time to compare
+         * @param Timeval $b The second time to compare
+         *
+         * @return int
+         * @throw \InvalidArgumentException
+         */
+        public static function compare(Timeval $a, Timeval $b) {}
+
+        /**
+         * Returns the infinite future time value as a timeval object
+         *
+         * @return Timeval Infinite future time value
+         */
+        public static function infFuture() {}
+
+        /**
+         * Returns the infinite past time value as a timeval object
+         *
+         * @return Timeval Infinite past time value
+         */
+        public static function infPast() {}
+
+        /**
+         * Returns the current time as a timeval object
+         *
+         * @return Timeval The current time
+         */
+        public static function now() {}
+
+        /**
+         * Checks whether the two times are within $threshold of each other
+         *
+         * @param Timeval $a The first time to compare
+         * @param Timeval $b The second time to compare
+         * @param Timeval $threshold The threshold to check against
+         *
+         * @return bool True if $a and $b are within $threshold, False otherwise
+         * @throw \InvalidArgumentException
+         */
+        public static function similar(Timeval $a, Timeval $b, Timeval $threshold) {}
+
+        /**
+         * Sleep until this time, interpreted as an absolute timeout
+         */
+        public function sleepUntil() {}
+
+        /**
+         * Subtracts another Timeval from this one and returns the difference.
+         * Calculations saturate at infinities.
+         *
+         * @param Timeval $other The other Timeval object to subtract
+         *
+         * @return Timeval A new Timeval object containing the sum
+         * @throw \InvalidArgumentException
+         */
+        public function subtract(Timeval $other) {}
+
+        /**
+         * Returns the zero time interval as a timeval object
+         *
+         * @return Timeval Zero length time interval
+         */
+        public static function zero() {}
     }
 }
