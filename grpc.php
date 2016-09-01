@@ -355,6 +355,7 @@ namespace Grpc
      * channel has seen a failure that it cannot recover from
      */
     const CHANNEL_SHUTDOWN = 4;
+    const CHANNEL_FATAL_FAILURE = 4;
 
     /**
      * Class Server
